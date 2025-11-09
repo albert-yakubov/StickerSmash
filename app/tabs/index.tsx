@@ -1,14 +1,26 @@
-import { Link } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+const PlaceholderImage = require('@/assets/images/background-image.png');
 
 export default function Index() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Home screen</Text>
-      <Link href="/about" style={styles.button}>
-        Go to about screen
-      </Link>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.imageContainer}>
+        <Image source={PlaceholderImage} style={styles.image} resizeMode="cover" />
+      </View>
+
+      <View style={styles.footerContainer}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Choose a photo</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={[styles.button, styles.primaryButton]}>
+          <Text style={[styles.buttonText, styles.primaryButtonText]}>Use this photo</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -19,12 +31,41 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  text: {
-    color: '#fff',
+  imageContainer: {
+    flex: 1,
+    width: '100%',
+    padding: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    width: 320,
+    height: 440,
+    borderRadius: 18,
+    backgroundColor: '#111',
+  },
+  footerContainer: {
+    width: '100%',
+    padding: 16,
+    alignItems: 'center',
+    gap: 12,
   },
   button: {
-    fontSize: 20,
-    textDecorationLine: 'underline',
-    color: '#fff'
-  }
+    width: '90%',
+    paddingVertical: 14,
+    borderRadius: 10,
+    backgroundColor: '#3a3f44',
+    alignItems: 'center',
+  },
+  primaryButton: {
+    backgroundColor: '#ffd33d',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  primaryButtonText: {
+    color: '#000',
+    fontWeight: '600',
+  },
 });
