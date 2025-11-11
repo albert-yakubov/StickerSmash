@@ -1,24 +1,38 @@
-import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Button from '@/components/Button';
+import ImageViewer from '@/components/ImageViewer';
+import * as ImagePicker from 'expo-image-picker';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const PlaceholderImage = require('@/assets/images/background-image.png');
 
 export default function Index() {
+  const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined);
+  const pickImageAsync = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      console.log(result);
+      setSelectedImage(result.assets[0].uri);
+    } else {
+      alert('You did not select any image.');
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.imageContainer}>
-        <Image source={PlaceholderImage} style={styles.image} resizeMode="cover" />
+        <ImageViewer imgSource={PlaceholderImage} selectedImage={selectedImage} />
       </View>
-
       <View style={styles.footerContainer}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Choose a photo</Text>
-        </TouchableOpacity>
+        <Button theme="primary" label="Choose a photo" onPress={pickImageAsync} />
+        <Button label="Use this photo" onPress={() => setSelectedImage(PlaceholderImage)} />
 
-        <TouchableOpacity style={[styles.button, styles.primaryButton]}>
-          <Text style={[styles.buttonText, styles.primaryButtonText]}>Use this photo</Text>
-        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -29,43 +43,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#25292e',
     alignItems: 'center',
-    justifyContent: 'center',
   },
   imageContainer: {
     flex: 1,
-    width: '100%',
-    padding: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  image: {
-    width: 320,
-    height: 440,
-    borderRadius: 18,
-    backgroundColor: '#111',
   },
   footerContainer: {
-    width: '100%',
-    padding: 16,
+    flex: 1 / 3,
     alignItems: 'center',
-    gap: 12,
-  },
-  button: {
-    width: '90%',
-    paddingVertical: 14,
-    borderRadius: 10,
-    backgroundColor: '#3a3f44',
-    alignItems: 'center',
-  },
-  primaryButton: {
-    backgroundColor: '#ffd33d',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  primaryButtonText: {
-    color: '#000',
-    fontWeight: '600',
   },
 });
